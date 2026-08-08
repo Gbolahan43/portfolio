@@ -1,0 +1,12 @@
+---
+/**
+ * Pending link — renders as plain muted text when URL is null.
+ * Never a dead link, never href="#". Per accessibility-and-rationale R-23.
+ */
+interface Props {
+  label: string;
+  class?: string;
+}
+const { label, class: className = '' } = Astro.props;
+---
+<span class={`pending ${className}`.trim()}>{label.toLowerCase()} pending</span>

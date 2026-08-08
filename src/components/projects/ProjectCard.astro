@@ -1,0 +1,109 @@
+---
+/**
+ * Featured project card (§01).
+ * Collapsed state carries: index → title/domain → system summary → outcome (3-state) → tags → links → expand trigger.
+ * Expansion reveals: Problem → Constraint → Decisions → Trade-offs → Stack.
+ * Per portfolio-design-plan §3.5 (field schema) and §3.6 (unverified-metric pattern).
+ */
+import type { FeaturedProject } from '~/data/portfolio';
+import Icon from '../ui/Icon.astro';
+import ScreenshotSlot from '../ui/ScreenshotSlot.astro';
+import Tag from '../ui/Tag.astro';
+import PendingLink from '../ui/PendingLink.astro';
+
+interface Props {
+  project: FeaturedProject;
+}
+
+const { project } = Astro.props;
+const detailId = `d-${project.index.replace('.', '-')}`;
+---
+
+<article class="card" data-od-id={`project-${project.index.replace('.', '-')}`}>
+  <ScreenshotSlot
+    src={project.screenshot.src}
+    alt={project.screenshot.alt}
+    width={project.screenshot.width}
+    height={project.screenshot.height}
+  />
+  <span class="caption card__idx"><span aria-hidden="true">§</span>{project.index}</span>
+
+  <div class="card__top">
+    <h3 class="h3">{project.title}</h3>
+    <p class="small card__domain">{project.domain}</p>
+  </div>
+
+  <p class="card__summary">{project.system}</p>
+
+  {/* Outcome slot — three states (A: verified, B: qualitative, C: withheld) */}
+  {project.outcome.state === 'A' ? (
+    <p class="outcome outcome--a">
+      <span class="outcome__value">{project.outcome.value}</span>
+      <span class="caption outcome__method">{project.outcome.method}</span>
+    </p>
+  ) : project.outcome.state === 'B' ? (
+    <p class="outcome outcome--b">{project.outcome.text}</p>
+  ) : null}
+
+  <div class="meta">
+    <ul class="tags">
+      {project.tags.map((tag) => <Tag label={tag} />)}
+    </ul>
+    <div class="links">
+      {project.links.repo.href ? (
+        <a class="ext" href={project.links.repo.href} target="_blank" rel="noopener noreferrer">
+          {project.links.repo.label}
+          <Icon name="arrow-up-right" width={12} height={12} strokeWidth={2} />
+          <span class="sr">(opens in a new tab)</span>
+        </a>
+      ) : (
+        <PendingLink label="repo" />
+      )}
+      {project.links.demo.href ? (
+        <a class="ext" href={project.links.demo.href} target="_blank" rel="noopener noreferrer">
+          {project.links.demo.label}
+          <Icon name="arrow-up-right" width={12} height={12} strokeWidth={2} />
+          <span class="sr">(opens in a new tab)</span>
+        </a>
+      ) : (
+        <PendingLink label="demo" />
+      )}
+    </div>
+  </div>
+
+  <button
+    class="disclose"
+    type="button"
+    aria-expanded="false"
+    aria-controls={detailId}
+  >
+    <span class="disclose__txt">Architecture, constraints & trade-offs</span>
+    <Icon name="chevron-down" class="disclose__ic" />
+  </button>
+
+  <div class="detail" id={detailId}><div>
+    <dl class="dl">
+      <dt>Problem</dt>
+      <dd>{project.detail.problem}</dd>
+
+      <dt>Constraint</dt>
+      <dd>{project.detail.constraint}</dd>
+
+      <dt>Decisions</dt>
+      <dd>
+        {project.detail.decisions.map((d) => (
+          <div class="dec">
+            <span class="dec__n">{d.n}</span>
+            <span>{d.text}</span>
+          </div>
+        ))}
+      </dd>
+
+      <dt>Trade-offs</dt>
+      <dd>{project.detail.tradeoffs}</dd>
+
+      <dt>Stack</dt>
+      <dd class="stack-list">{project.detail.stack.join(' · ')}</dd>
+    </dl>
+  </div></div>
+</article>

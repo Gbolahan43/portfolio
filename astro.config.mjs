@@ -1,5 +1,9 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import { resolve } from 'path';
+import { fileURLToPath } from 'url';
+
+const projectRoot = resolve(process.cwd());
 
 const basePath = process.env.BASE_PATH || '';
 
@@ -12,7 +16,8 @@ export default defineConfig({
   vite: {
     resolve: {
       alias: {
-        '~': 'src',
+        '~': resolve(projectRoot, 'src'),
+        '~/': resolve(projectRoot, 'src/') + '/',
       },
     },
     build: {
@@ -20,9 +25,6 @@ export default defineConfig({
     },
   },
   integrations: [
-    sitemap({
-      changefreq: { homepage: 'monthly' },
-      lastmod: false,
-    }),
+    sitemap(),
   ],
 });

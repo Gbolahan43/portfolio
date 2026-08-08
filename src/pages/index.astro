@@ -1,0 +1,80 @@
+---
+/**
+ * Single-page portfolio — assembles all sections in the approved order.
+ * Order: Hero → Evidence → §01 Work → §02 Open Source → §03 Thinking →
+ *        §04 Community → §05 About → §06 Contact → Footer.
+ * Per portfolio-design-plan §3.2 (section order) and §5.1 (single page, six anchors).
+ */
+import Layout from '~/layouts/Layout.astro';
+import SkipLink from '~/components/ui/SkipLink.astro';
+import HeaderNav from '~/components/layout/HeaderNav.astro';
+import Hero from '~/components/sections/Hero.astro';
+import EvidenceStrip from '~/components/sections/EvidenceStrip.astro';
+import Work from '~/components/sections/Work.astro';
+import OpenSource from '~/components/sections/OpenSource.astro';
+import Thinking from '~/components/sections/Thinking.astro';
+import Community from '~/components/sections/Community.astro';
+import About from '~/components/sections/About.astro';
+import Contact from '~/components/sections/Contact.astro';
+import Footer from '~/components/layout/Footer.astro';
+
+import {
+  hero,
+  sections,
+  navLinks,
+  featuredProjects,
+  alsoBuilt,
+  openSource,
+  thinking,
+  community,
+  about,
+  contact,
+} from '~/data/portfolio';
+import { siteConfig } from '~/data/site';
+---
+
+<Layout title={siteConfig.title} description={siteConfig.description}>
+  <SkipLink />
+
+  <HeaderNav navLinks={navLinks} resume={hero.resume} />
+
+  <main id="main">
+    <!-- === Hero (L0 — above fold) === -->
+    <Hero hero={hero} />
+
+    <!-- Evidence strip: non-numeric facts straddling the fold -->
+    <EvidenceStrip items={hero.evidence} />
+
+    <!-- === §01 Selected Work === -->
+    <Work projects={featuredProjects} compact={alsoBuilt} section={sections.work} />
+
+    <!-- === §02 Open Source === -->
+    <OpenSource entries={openSource} section={sections.openSource} />
+
+    <!-- === §03 Thinking === -->
+    <Thinking entries={thinking} section={sections.thinking} />
+
+    <!-- === §04 Community === -->
+    <Community
+      credential={community.credential}
+      body={community.body}
+      section={sections.community}
+    />
+
+    <!-- === §05 About === -->
+    <About
+      portrait={about.portrait}
+      paragraphs={about.paragraphs}
+      section={sections.about}
+    />
+
+    <!-- === §06 Contact (the only centered section) === -->
+    <Contact contact={contact} />
+  </main>
+
+  <Footer
+    name={siteConfig.name}
+    location="Lagos, Nigeria"
+    links={contact.secondaryLinks}
+  />
+</Layout>

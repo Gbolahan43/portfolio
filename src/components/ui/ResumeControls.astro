@@ -1,0 +1,39 @@
+---
+/**
+ * Résumé control pair — one visual object, two actions.
+ * Primary: "Résumé" text button, opens PDF in new tab.
+ * Secondary: download icon button, saves PDF directly.
+ * Shared border, 1px internal divider, ≥44px touch target.
+ * Per design-system-spec §10.8 and accessibility-and-rationale R-21.
+ */
+import type { ResumeCta } from '~/data/portfolio';
+import Icon from './Icon.astro';
+
+interface Props {
+  resume: ResumeCta;
+  class?: string;
+}
+
+const { resume, class: className = '' } = Astro.props;
+---
+
+<span class={`cv ${className}`.trim()}>
+  <a
+    class="cv__open"
+    href={resume.open.href}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {resume.open.label}
+    <Icon name="arrow-up-right" width={12} height={12} strokeWidth={2} />
+    <span class="sr">{resume.open.sr}</span>
+  </a>
+  <a
+    class="cv__save"
+    href={resume.download.href}
+    download
+    aria-label={resume.download.ariaLabel}
+  >
+    <Icon name="download" />
+  </a>
+</span>

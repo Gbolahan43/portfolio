@@ -1,0 +1,13 @@
+---
+/**
+ * Tag — mono lowercase identifier, surface bg, --muted text.
+ * Not accent-coloured. Non-interactive in §01; interactive in §03.
+ * Per design-system-spec §10.8.
+ */
+interface Props {
+  label: string;
+  class?: string;
+}
+const { label, class: className = '' } = Astro.props;
+---
+<li class={`tag ${className}`.trim()}>{label}</li>

@@ -1,0 +1,41 @@
+---
+/**
+ * Hero — L0, the 10-second contract.
+ * Eyebrow → headline (display) → sub-line → availability chip → CTA pair.
+ * min-height: 78vh so the evidence strip straddles the fold.
+ * Per content-inventory §1, design-system-spec §9.1, wireframes §7.2.
+ */
+import type { HeroData, ResumeCta } from '~/data/portfolio';
+import Chip from '../ui/Chip.astro';
+import ResumeControls from '../ui/ResumeControls.astro';
+
+interface Props {
+  hero: HeroData;
+}
+
+const { hero } = Astro.props;
+---
+
+<section class="hero container" data-od-id="hero">
+  <div class="hero__inner">
+    <p class="label hero__eyebrow" data-od-id="hero-eyebrow">{hero.eyebrow}</p>
+
+    <h1 class="display" data-od-id="hero-headline">
+      {hero.headline.map((line, i) => (
+        <>
+          {i > 0 && <br class="lb" />}
+          {line}
+        </>
+      ))}
+    </h1>
+
+    <p class="hero__sub" data-od-id="hero-subline">{hero.subline}</p>
+
+    <p class="chip" data-od-id="hero-availability">{hero.availability}</p>
+
+    <div class="hero__cta" data-od-id="hero-cta">
+      <ResumeControls resume={hero.resume} />
+      <a class="btn-ghost" href={hero.getInTouchHref} data-od-id="hero-cta-touch">Get in touch</a>
+    </div>
+  </div>
+</section>

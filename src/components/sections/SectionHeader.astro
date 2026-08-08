@@ -1,0 +1,22 @@
+---
+/**
+ * Section header — §0N rail + section name.
+ * On desktop: numbered rail in cols 1-2, name right-aligned.
+ * On mobile <768px: §0N and name on one line, left-aligned.
+ * §0N is aria-hidden (decorative) — screen reader hears only the name.
+ * Per design-system-spec §10.8 and wireframes §7.3.
+ */
+interface Props {
+  num: string;     // e.g. "§01"
+  name: string;    // e.g. "Selected Work"
+  id: string;      // heading id
+  tight?: boolean; // reduced top padding (§04 Community)
+}
+
+const { num, name, id, tight = false } = Astro.props;
+---
+
+<div class={`section__head ${tight ? 'section--tight' : ''}`}>
+  <p class="caption section__num"><span aria-hidden="true">{num}</span></p>
+  <h2 class="label section__name" id={id}>{name}</h2>
+</div>

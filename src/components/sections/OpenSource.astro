@@ -1,0 +1,41 @@
+---
+/**
+ * §02 Open Source — two equal cards, role as mono caps label.
+ * Per wireframes §7.6 and content-inventory §4.
+ */
+import type { OpenSourceEntry } from '~/data/portfolio';
+import Icon from '../ui/Icon.astro';
+import type { SectionData } from '~/data/portfolio';
+
+interface Props {
+  entries: OpenSourceEntry[];
+  section: SectionData;
+}
+
+const { entries, section } = Astro.props;
+---
+
+<section class="section container" id={section.id} aria-labelledby={`${section.id}-h`} data-od-id={`section-${section.id}`}>
+  <div class="section__head">
+    <p class="caption section__num"><span aria-hidden="true">{section.num}</span></p>
+    <h2 class="label section__name" id={`${section.id}-h`}>{section.name}</h2>
+  </div>
+  <div class="section__body">
+    <div class="duo reveal">
+      {entries.map((entry) => (
+        <article class="card card--os" data-od-id={`os-${entry.title.toLowerCase().replace(/ /g, '-')}`}>
+          <h3 class="h3">{entry.title}</h3>
+          <span class="caption role">{entry.role}</span>
+          <p>{entry.summary}</p>
+          <div class="links">
+            <a class="ext" href={entry.link.href || '#'} target="_blank" rel="noopener noreferrer">
+              {entry.link.label}
+              <Icon name="arrow-up-right" width={12} height={12} strokeWidth={2} />
+              <span class="sr">(opens in a new tab)</span>
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

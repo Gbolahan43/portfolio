@@ -1,0 +1,12 @@
+---
+/**
+ * Availability chip — surface bg, 1px border, pill radius, accent dot.
+ * Per design-system-spec §10.8 — the dot is NOT counted against accent budget.
+ */
+interface Props {
+  text: string;
+  class?: string;
+}
+const { text, class: className = '' } = Astro.props;
+---
+<p class={`chip ${className}`.trim()}>{text}</p>

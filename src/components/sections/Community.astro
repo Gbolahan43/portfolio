@@ -1,0 +1,32 @@
+---
+/**
+ * §04 Community — compact credential + short body.
+ * The shortest section — a credential line, not a paragraph.
+ * Uses section--tight (reduced top padding).
+ * Per wireframes §7.8 and content-inventory §6.
+ */
+import type { SectionData } from '~/data/portfolio';
+
+interface Props {
+  credential: string;
+  body: string;
+  section: SectionData;
+}
+
+const { credential, body, section } = Astro.props;
+---
+
+<section class="section section--tight container" id={section.id} aria-labelledby={`${section.id}-h`} data-od-id={`section-${section.id}`}>
+  <div class="section__head">
+    <p class="caption section__num"><span aria-hidden="true">{section.num}</span></p>
+    <h2 class="label section__name" id={`${section.id}-h`}>{section.name}</h2>
+  </div>
+  <div class="section__body">
+    <div class="reveal">
+      <p class="label cred">{credential}</p>
+      <p class="prose" style="margin-top:var(--space-4);color:var(--fg-subtle)">
+        {body}
+      </p>
+    </div>
+  </div>
+</section>

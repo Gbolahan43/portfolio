@@ -1,0 +1,33 @@
+---
+/**
+ * Icon component — renders exact SVG markup from the approved design.
+ * Stroke: 1.75px for most icons; 2px for arrow-up-right and check.
+ * Uses Fragment to inject inner SVG content (set:html on <svg> is unreliable in Astro).
+ */
+import type { IconName } from '~/lib/icons';
+import { icons } from '~/lib/icons';
+
+interface Props {
+  name: IconName;
+  class?: string;
+  ['aria-hidden']?: boolean;
+}
+
+const { name, class: className = '', 'aria-hidden': ariaHidden = true } = Astro.props;
+const icon = icons[name];
+---
+
+<svg
+  width={icon.width}
+  height={icon.height}
+  viewBox={icon.viewBox}
+  fill="none"
+  stroke="currentColor"
+  stroke-width={icon.strokeWidth}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={className}
+  aria-hidden={ariaHidden ? 'true' : undefined}
+>
+  <Fragment set:html={icon.svg} />
+</svg>

@@ -1,0 +1,81 @@
+---
+/**
+ * Root layout — HTML shell, SEO metadata, font loading, and global CSS.
+ * Includes the client-side interactions via client:load.
+ * Per accessibility §12.5 (page title), SEO §9, performance §10.
+ */
+import '~/styles/global.css';
+import { siteConfig } from '~/data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = siteConfig.title, description = siteConfig.description } = Astro.props;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: siteConfig.name,
+  jobTitle: siteConfig.role,
+  url: siteConfig.domain,
+  sameAs: [siteConfig.github, siteConfig.linkedin],
+  worksFor: {
+    '@type': 'Organization',
+    name: 'Independent',
+  },
+};
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={siteConfig.domain} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="profile" />
+    <meta property="og:url" content={siteConfig.domain} />
+    <meta property="og:image" content={`${siteConfig.domain}/og-image.png`} />
+    <meta property="profile:first_name" content="Abdulbasit" />
+    <meta property="profile:last_name" content="Olanrewaju" />
+
+    <!-- Twitter/X -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Fonts — swap strategy, no layout shift -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400..600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- JSON-LD Structured Data: Person schema -->
+    <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+  </head>
+
+  <body>
+    <slot />
+
+    <!-- Client-side interactions: theme, nav, disclosure, filter, clipboard, reveals -->
+    <script client:load>
+      import { initInteractions } from '~/lib/client';
+      initInteractions();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+---
+/**
+ * Project detail — expanded L2 content.
+ * Uses <dl>/<dt>/<dd> for genuine term–definition pairs (accessibility §12.2).
+ * Fields: Problem, Constraint, Decisions, Trade-offs, Stack.
+ */
+import type { FeaturedProject } from '~/data/portfolio';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  project: FeaturedProject;
+  detailId: string;
+}
+
+const { project, detailId } = Astro.props;
+---
+
+<div class="detail" id={detailId}><div>
+  <dl class="dl">
+    <dt>Problem</dt>
+    <dd>{project.detail.problem}</dd>
+
+    <dt>Constraint</dt>
+    <dd>{project.detail.constraint}</dd>
+
+    <dt>Decisions</dt>
+    <dd>
+      {project.detail.decisions.map((d) => (
+        <div class="dec">
+          <span class="dec__n">{d.n}</span>
+          <span>{d.text}</span>
+        </div>
+      ))}
+    </dd>
+
+    <dt>Trade-offs</dt>
+    <dd>{project.detail.tradeoffs}</dd>
+
+    <dt>Stack</dt>
+    <dd class="stack-list">{project.detail.stack.join(' · ')}</dd>
+  </dl>
+</div></div>

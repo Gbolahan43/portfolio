@@ -1,0 +1,29 @@
+---
+/**
+ * Section wrapper — standard §0N layout: numbered rail + name + body grid.
+ * The rail is cols 1-2; content is col 3-12. On mobile, rail collapses inline.
+ * `tight` reduces top padding (used by §04 Community).
+ * Per wireframes §8.2 and design-system-spec §11.
+ */
+interface Props {
+  id: string;
+  num: string;
+  name: string;
+  tight?: boolean;
+  labelId?: string;
+  odId?: string;
+}
+
+const { id, num, name, tight = false, labelId, odId } = Astro.props;
+const lblId = labelId || `${id}-h`;
+---
+
+<section class:list={['section', 'container', { 'section--tight': tight }]} id={id} aria-labelledby={lblId} data-od-id={odId}>
+  <div class="section__head">
+    <p class="caption section__num"><span aria-hidden="true">{num}</span></p>
+    <h2 class="label section__name" id={lblId}>{name}</h2>
+  </div>
+  <div class="section__body">
+    <slot />
+  </div>
+</section>

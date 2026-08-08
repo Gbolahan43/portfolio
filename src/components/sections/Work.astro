@@ -1,0 +1,39 @@
+---
+/**
+ * §01 Selected Work — featured projects + "Also built" compact rows.
+ * Featured: 3 expandable cards with full field schema.
+ * Also built: 3 compact rows, no expansion, no metrics.
+ * Per portfolio-design-plan §3.5, §6.2-6.3, wireframes §7.3-7.5.
+ */
+import type { FeaturedProject, CompactProject } from '~/data/portfolio';
+import ProjectCard from '../projects/ProjectCard.astro';
+import CompactRow from '../projects/CompactRow.astro';
+import type { SectionData } from '~/data/portfolio';
+
+interface Props {
+  projects: FeaturedProject[];
+  compact: CompactProject[];
+  section: SectionData;
+}
+
+const { projects, compact, section } = Astro.props;
+---
+
+<section class="section container" id={section.id} aria-labelledby={`${section.id}-h`} data-od-id={`section-${section.id}`}>
+  <div class="section__head">
+    <p class="caption section__num"><span aria-hidden="true">{section.num}</span></p>
+    <h2 class="label section__name" id={`${section.id}-h`}>{section.name}</h2>
+  </div>
+  <div class="section__body">
+    <div class="stack reveal">
+      {projects.map((p) => <ProjectCard project={p} />)}
+    </div>
+
+    <div class="reveal" data-od-id="also-built">
+      <h3 class="label subhead">Also built</h3>
+      <ul class="rows">
+        {compact.map((p) => <CompactRow project={p} />)}
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,45 @@
+---
+/**
+ * Compact project row ("Also built") — §01.3.
+ * Density drop is the tiering signal: no cards, no expansion, no metrics.
+ * 3-column: thumbnail → title/desc → links.
+ * Per portfolio-design-plan §3.5(R-5) and wireframes §7.5.
+ */
+import type { CompactProject, Link } from '~/data/portfolio';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  project: CompactProject;
+}
+
+const { project } = Astro.props;
+---
+
+<li class="row">
+  <span class="thumb" data-shot data-od-id={`thumb-${project.title.toLowerCase().replace(/ /g, '-')}`}>
+    <img
+      src={project.thumbnail.src}
+      alt={project.thumbnail.alt}
+      width="640"
+      height="360"
+      loading="lazy"
+      decoding="async"
+    />
+    <span class="thumb__ph" aria-hidden="true">16:9</span>
+  </span>
+  <span class="row__title">{project.title}</span>
+  <span class="row__desc">{project.description}</span>
+  <span class="row__links">
+    {project.links.map((link: Link) =>
+      link.href ? (
+        <a class="ext" href={link.href} target="_blank" rel="noopener noreferrer">
+          {link.label}
+          <Icon name="arrow-up-right" width={12} height={12} strokeWidth={2} />
+          <span class="sr">(opens in a new tab)</span>
+        </a>
+      ) : (
+        <span class="pending">{link.label.toLowerCase()} pending</span>
+      )
+    )}
+  </span>
+</li>

@@ -1,0 +1,32 @@
+---
+/**
+ * Screenshot slot — 16:9 band that shows a labelled placeholder
+ * until the image actually decodes. A missing file keeps the placeholder
+ * instead of rendering a broken-image icon.
+ * Per assets/README.md — exact filenames, 16:9 ratio, object-fit cover.
+ */
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  class?: string;
+}
+
+const { src, alt, width, height, class: className = '' } = Astro.props;
+---
+
+<figure class={`shot ${className}`.trim()} data-shot>
+  <img
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading="lazy"
+    decoding="async"
+  />
+  <figcaption class="shot__ph caption">
+    <b>Screenshot slot · 16:9</b>
+    <span class="shot__path">{src}</span>
+  </figcaption>
+</figure>

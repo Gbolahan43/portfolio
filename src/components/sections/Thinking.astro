@@ -1,0 +1,60 @@
+---
+/**
+ * §03 Thinking — essays + talks merged, tag-filterable.
+ * Format label (ESSAY/TALK) in the left rail; title leads (DI-20).
+ * Tag filter: role="tablist" with roving tabindex, arrow-key navigation.
+ * Per wireframes §7.7 and content-inventory §5.
+ */
+import type { ThinkingEntry } from '~/data/portfolio';
+import type { SectionData } from '~/data/portfolio';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  entries: ThinkingEntry[];
+  section: SectionData;
+}
+
+const { entries, section } = Astro.props;
+---
+
+<section class="section container" id={section.id} aria-labelledby={`${section.id}-h`} data-od-id={`section-${section.id}`}>
+  <div class="section__head">
+    <p class="caption section__num"><span aria-hidden="true">{section.num}</span></p>
+    <h2 class="label section__name" id={`${section.id}-h`}>{section.name}</h2>
+  </div>
+  <div class="section__body">
+    <div class="reveal" data-od-id="section-thinking-body">
+      <div class="filter" role="tablist" aria-label="Filter by topic" aria-orientation="horizontal" data-od-id="thinking-filter">
+        <button role="tab" type="button" aria-selected="true" data-tag="all">All</button>
+        <button role="tab" type="button" aria-selected="false" data-tag="agents" tabindex={-1}>agents</button>
+        <button role="tab" type="button" aria-selected="false" data-tag="serverless" tabindex={-1}>serverless</button>
+        <button role="tab" type="button" aria-selected="false" data-tag="retrieval" tabindex={-1}>retrieval</button>
+        <button role="tab" type="button" aria-selected="false" data-tag="prompt-engineering" tabindex={-1}>prompt-engineering</button>
+      </div>
+
+      <ul class="think" data-od-id="thinking-list">
+        {entries.map((entry) => (
+          <li class="think__item" data-tags={entry.tags.join(' ')}>
+            <span class="label think__fmt">{entry.format === 'essay' ? 'Essay' : 'Talk'}</span>
+            <div>
+              <p class="think__title">{entry.title}</p>
+              <div class="think__foot">
+                <span class="think__venue">{entry.venue}</span>
+                {entry.link ? (
+                  <a class="ext" href={entry.link} target="_blank" rel="noopener noreferrer">
+                    Read
+                    <Icon name="arrow-up-right" width={12} height={12} strokeWidth={2} />
+                    <span class="sr">(opens in a new tab)</span>
+                  </a>
+                ) : (
+                  <span class="pending">link pending</span>
+                )}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <p class="sr" role="status" id="filter-status"></p>
+    </div>
+  </div>
+</section>

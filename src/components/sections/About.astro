@@ -1,0 +1,35 @@
+---
+/**
+ * §05 About — portrait (left) + prose (right).
+ * Portrait is here only, never in the hero (R-24).
+ * Square crop, --radius-md, 1:1, 320px desktop / capped 280px mobile.
+ * Per wireframes §7.8 and content-inventory §5.
+ */
+import type { SectionData } from '~/data/portfolio';
+
+interface Props {
+  portrait: { src: string; alt: string };
+  paragraphs: string[];
+  section: SectionData;
+}
+
+const { portrait, paragraphs, section } = Astro.props;
+---
+
+<section class="section container" id={section.id} aria-labelledby={`${section.id}-h`} data-od-id={`section-${section.id}`}>
+  <div class="section__head">
+    <p class="caption section__num"><span aria-hidden="true">{section.num}</span></p>
+    <h2 class="label section__name" id={`${section.id}-h`}>{section.name}</h2>
+  </div>
+  <div class="section__body">
+    <div class="split reveal">
+      <div class="portrait" data-od-id="about-portrait">
+        <span class="caption">Portrait</span>
+        <span class="caption" style="letter-spacing:.04em;text-transform:none">1:1 · high-contrast · cool-neutral grade</span>
+      </div>
+      <div class="about">
+        {paragraphs.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </div>
+</section>

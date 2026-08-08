@@ -1,0 +1,55 @@
+---
+/**
+ * §06 Contact — the only centered section (R-06).
+ * Heading → availability restated → copy-email button → secondary links.
+ * Email is copy-to-clipboard with visible confirmation (DI-07, R-22).
+ * Per wireframes §7.8 and content-inventory §6.
+ */
+import type { ContactData } from '~/data/portfolio';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  contact: ContactData;
+}
+
+const { contact } = Astro.props;
+---
+
+<section class="contact container" id="contact" aria-labelledby="contact-h" data-od-id="section-contact">
+  <div class="reveal">
+    <h2 class="h1" id="contact-h">{contact.heading}</h2>
+    <p class="contact__sub">{contact.subline}</p>
+
+    <button class="copy" id="copy-email" type="button" data-email={contact.email || ''} data-od-id="copy-email">
+      {contact.email ? (
+        <span class="copy__email mono">{contact.email}</span>
+      ) : (
+        <span class="pending">email address pending</span>
+      )}
+      <span class="copy__action">
+        <span class="copy__label">Copy</span>
+        <span class="i-copy">
+          <Icon name="copy" />
+        </span>
+        <span class="i-check">
+          <Icon name="check" />
+        </span>
+      </span>
+    </button>
+    <p class="sr" role="status" aria-live="polite" id="copy-status"></p>
+
+    <div class="links" data-od-id="contact-links">
+      {contact.secondaryLinks.map((link) => (
+        link.href ? (
+          <a class="ext" href={link.href} target="_blank" rel="noopener noreferrer">
+            {link.label}
+            <Icon name="arrow-up-right" width={12} height={12} strokeWidth={2} />
+            <span class="sr">(opens in a new tab)</span>
+          </a>
+        ) : (
+          <span class="pending">{link.label.toLowerCase()} pending</span>
+        )
+      ))}
+    </div>
+  </div>
+</section>

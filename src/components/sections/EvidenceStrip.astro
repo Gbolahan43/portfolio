@@ -1,0 +1,19 @@
+---
+/**
+ * Evidence strip — three non-numeric facts straddling the fold.
+ * Mono, full-width, 3 equal cells with hairline borders.
+ * Stacks to 3 rows on mobile. Per §3.3 and design-system-spec §9.1.
+ */
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+---
+
+<div class="container">
+  <div class="evidence" data-od-id="evidence-strip">
+    {items.map((item) => (
+      <p class="caption evidence__cell">{item}</p>
+    ))}
+  </div>
+</div>

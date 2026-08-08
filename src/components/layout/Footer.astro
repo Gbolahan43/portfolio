@@ -1,0 +1,36 @@
+---
+/**
+ * Footer — name + location / links row.
+ * Repeats email, GitHub, LinkedIn, Résumé for recruiter fallback (DI-10).
+ * Per wireframes §7.8 and accessibility §12.2.
+ */
+import type { Link } from '~/data/portfolio';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  name: string;
+  location: string;
+  links: Link[];
+}
+
+const { name, location, links } = Astro.props;
+---
+
+<footer data-od-id="site-footer">
+  <div class="foot container">
+    <p class="caption">{name} · {location}</p>
+    <div class="links">
+      {links.map((link) =>
+        link.href ? (
+          <a class="ext" href={link.href} target="_blank" rel="noopener noreferrer">
+            {link.label}
+            <Icon name="arrow-up-right" width={12} height={12} strokeWidth={2} />
+            <span class="sr">(opens in a new tab)</span>
+          </a>
+        ) : (
+          <span class="pending">{link.label.toLowerCase()} pending</span>
+        )
+      )}
+    </div>
+  </div>
+</footer>

@@ -1,1 +1,26 @@
 node_modules
+*.zip
+
+# Build output
+/dist/
+.astro/
+
+# Environment files
+.env
+.env.*
+
+# OS files
+.DS_Store
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+
+# Hosting
+.vercel/
+.netlify/
+
+# Design artifacts
+Portfolio-Design-Discovery-New/
