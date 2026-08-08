@@ -1,0 +1,22 @@
+{
+  "name": "abdulbasit-olanrewaju-portfolio",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lint": "astro check",
+    "test:build": "astro build"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
+    "astro": "^7.2.0",
+    "postcss": "^8.5.26",
+    "tailwindcss": "^3.4.19"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.5.4",
+    "typescript": "^5.7.0"
+  },
+  "private": true
+}
