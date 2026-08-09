@@ -285,27 +285,58 @@ export const featuredProjects: FeaturedProject[] = [
       stack: ['Bedrock', 'Python', 'AWS'],
     },
   },
+  {
+    // ⚠️ PLACEHOLDER COPY — awaiting content pass. Structure is final; strings are not.
+    index: '01.4',
+    title: 'Crop disease prediction',
+    domain: 'Leaf-image disease classification for field scouting',
+    system:
+      'A convolutional network with a spatial attention module classifying leaf images, served through a Streamlit front end. ⚠️ Placeholder — replace with the real system summary.',
+    outcome: {
+      state: 'B',
+      text: 'Classifies leaf images into disease classes from a single photo. ⚠️ Placeholder outcome — replace or promote to state A with a verified figure.',
+    },
+    tags: ['vision'],
+    links: {
+      repo: { label: 'Repo', href: null },
+      demo: { label: 'Demo', href: 'https://crop-disease.streamlit.app/' },
+    },
+    screenshot: {
+      src: '/images/crop-disease.png',
+      alt: 'Crop disease prediction app — a classified leaf image with its predicted class',
+      width: 1600,
+      height: 900,
+    },
+    detail: {
+      problem:
+        'Field scouts diagnose crop disease by eye, and misreads compound across a season. ⚠️ Placeholder.',
+      constraint:
+        'Had to run inference within a free-tier Streamlit container with no GPU. ⚠️ Confirm the deployment constraint.',
+      decisions: [
+        {
+          n: '01',
+          text: 'Spatial attention over a plain CNN backbone — lesion cues are local, and attention kept the useful region weighted without a larger model. ⚠️ Placeholder.',
+        },
+        {
+          n: '02',
+          text: 'Placeholder decision — replace with the second real architectural choice and the reason behind it.',
+        },
+      ],
+      tradeoffs:
+        'Placeholder trade-off — state what was given up and what it bought.',
+      stack: ['PyTorch', 'Streamlit', 'Python'],
+    },
+  },
 ];
 
 // ── Also built (compact) ─────────────────────────────────────
 export const alsoBuilt: CompactProject[] = [
   {
-    title: 'Crop disease prediction',
-    description: 'CNN with spatial attention classifying leaf images, deployed on Streamlit.',
-    thumbnail: {
-      src: '/images/crop-disease.png',
-      alt: 'Crop disease prediction app — a classified leaf image with its predicted class',
-    },
-    links: [
-      { label: 'Live demo', href: 'https://crop-disease.streamlit.app/' },
-    ],
-  },
-  {
     title: 'Fraud detection system',
     description:
       'Random-forest classifier served as a serverless microservice for pre-settlement transaction screening.',
     thumbnail: {
-      src: '/images/fraud-detection.png',
+      src: '/images/fraudsystem.png',
       alt: 'Fraud detection app — a transaction screened with its risk score',
     },
     links: [
@@ -316,7 +347,7 @@ export const alsoBuilt: CompactProject[] = [
     title: 'Sentiment analysis API',
     description: 'FastAPI service wrapping a quantized transformer for low-overhead sentiment scoring.',
     thumbnail: {
-      src: '/images/sentiment-api.png',
+      src: '/images/sentiment.png',
       alt: 'Sentiment analysis API — a request and its scored response',
     },
     links: [
@@ -391,7 +422,7 @@ export const community = {
 // ── About (§05) ──────────────────────────────────────────────
 export const about = {
   portrait: {
-    src: '/images/portrait.svg',
+    src: '/images/portrait.jpg',
     alt: 'Abdulbasit Olanrewaju',
   },
   paragraphs: [
