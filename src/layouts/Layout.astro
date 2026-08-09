@@ -1,11 +1,12 @@
 ---
 /**
  * Root layout — HTML shell, SEO metadata, font loading, and global CSS.
- * Includes the client-side interactions via client:load.
+ * Includes the client-side interactions via ClientLoader (client:load).
  * Per accessibility §12.5 (page title), SEO §9, performance §10.
  */
 import '~/styles/global.css';
 import { siteConfig } from '~/data/site';
+import ClientLoader from '~/components/ClientLoader.astro';
 
 interface Props {
   title?: string;
@@ -73,9 +74,6 @@ const schema = {
     <slot />
 
     <!-- Client-side interactions: theme, nav, disclosure, filter, clipboard, reveals -->
-    <script client:load>
-      import { initInteractions } from '~/lib/client';
-      initInteractions();
-    </script>
+    <ClientLoader />
   </body>
 </html>

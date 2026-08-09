@@ -1,0 +1,165 @@
+---
+/**
+ * Client-side interactions — handles all interactive behaviors.
+ * Theme toggle, sticky nav, project disclosure, tag filter, copy email,
+ * screenshot loading, scroll reveals + section rail indicator.
+ * Uses plain <script defer> instead of client:load for maximum reliability.
+ * Per design-system-spec §10.9 (motion) and accessibility §12.4-12.7.
+ */
+---
+<script defer>
+(function() {
+  'use strict';
+  var root = document.documentElement;
+
+  /* ── 1 · Theme: light default, dark on request, persisted ────────── */
+  var toggle = document.getElementById('theme-toggle');
+  if (toggle) {
+    var applyTheme = function(t) {
+      root.setAttribute('data-theme', t);
+      var dark = t === 'dark';
+      toggle.setAttribute('aria-pressed', String(dark));
+      toggle.setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+    };
+    var saved = null;
+    try { saved = localStorage.getItem('theme'); } catch(e) {}
+    applyTheme(saved === 'dark' ? 'dark' : 'light');
+    toggle.addEventListener('click', function() {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      try { localStorage.setItem('theme', next); } catch(e) {}
+    });
+  }
+
+  /* ── 2 · Sticky nav: appears past scrollY > 80px ────────────────── */
+  var nav = document.getElementById('site-nav');
+  if (nav) {
+    var navOn = false;
+    var onScroll = function() {
+      var should = window.scrollY > 80;
+      if (should !== navOn) {
+        navOn = should;
+        nav.classList.toggle('is-visible', should);
+      }
+    };
+    onScroll();
+    addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  /* ── 3 · Project disclosure: aria-expanded toggle ────────────────── */
+  var btns = document.querySelectorAll('.disclose');
+  btns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+    });
+  });
+
+  /* ── 4 · Tag filter: one tab stop, arrow-key roving ─────────────── */
+  var tabs = [].slice.call(document.querySelectorAll('.filter [role="tab"]'));
+  var items = [].slice.call(document.querySelectorAll('.think__item'));
+  var status = document.getElementById('filter-status');
+  if (tabs.length > 0 && items.length > 0) {
+    var select = function(tab) {
+      tabs.forEach(function(t) {
+        var on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+      });
+      var tag = tab.dataset.tag;
+      var shown = 0;
+      items.forEach(function(li) {
+        var itemTags = li.dataset.tags || '';
+        var ok = tag === 'all' || (' ' + itemTags + ' ').indexOf(' ' + tag + ' ') > -1;
+        li.hidden = !ok;
+        if (ok) shown++;
+      });
+      if (status) { status.textContent = shown + (shown === 1 ? ' item' : ' items') + ' shown'; }
+    };
+    tabs.forEach(function(tab, i) {
+      tab.addEventListener('click', function() { select(tab); });
+      tab.addEventListener('keydown', function(e) {
+        var n = null;
+        if (e.key === 'ArrowRight') n = tabs[(i + 1) % tabs.length];
+        else if (e.key === 'ArrowLeft') n = tabs[(i - 1 + tabs.length) % tabs.length];
+        else if (e.key === 'Home') n = tabs[0];
+        else if (e.key === 'End') n = tabs[tabs.length - 1];
+        if (n) { e.preventDefault(); n.focus(); select(n); }
+      });
+    });
+  }
+
+  /* ── 5 · Copy email to clipboard ─────────────────────────────────── */
+  var copyBtn = document.getElementById('copy-email');
+  if (copyBtn) {
+    var copyLbl = copyBtn.querySelector('.copy__label');
+    var copySt = document.getElementById('copy-status');
+    var copyTmr;
+    copyBtn.addEventListener('click', function() {
+      var addr = copyBtn.dataset.email || '';
+      if (!addr) {
+        if (copySt) copySt.textContent = 'No email address is set yet.';
+        return;
+      }
+      var done = function() {
+        copyBtn.classList.add('is-done');
+        if (copyLbl) copyLbl.textContent = 'Copied';
+        if (copySt) copySt.textContent = 'Email address copied.';
+        clearTimeout(copyTmr);
+        copyTmr = setTimeout(function() {
+          copyBtn.classList.remove('is-done');
+          if (copyLbl) copyLbl.textContent = 'Copy';
+        }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(addr).then(done, function() {
+          if (copySt) copySt.textContent = 'Copy failed — the address is ' + addr;
+        });
+      } else {
+        if (copySt) copySt.textContent = 'Copy unavailable — the address is ' + addr;
+      }
+    });
+  }
+
+  /* ── 6 · Preview slots: show image or keep placeholder ──────────── */
+  var shots = document.querySelectorAll('[data-shot]');
+  shots.forEach(function(slot) {
+    var img = slot.querySelector('img');
+    if (!img) return;
+    function show() { slot.classList.add('is-loaded'); }
+    function hide() { slot.classList.remove('is-loaded'); }
+    if (img.complete) {
+      if (img.naturalWidth > 0) show(); else hide();
+    }
+    img.addEventListener('load', show);
+    img.addEventListener('error', hide);
+  });
+
+  /* ── 7 · Reveal on scroll + section rail indicator ──────────────── */
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var reveals = [].slice.call(document.querySelectorAll('.reveal'));
+  if (reduce || !('IntersectionObserver' in window)) {
+    reveals.forEach(function(el) { el.classList.add('is-in'); });
+  } else {
+    var ro = new IntersectionObserver(function(entries) {
+      entries.forEach(function(en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('is-in');
+          ro.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(function(el) { ro.observe(el); });
+  }
+
+  var sections = [].slice.call(document.querySelectorAll('.section'));
+  if ('IntersectionObserver' in window) {
+    var so = new IntersectionObserver(function(entries) {
+      entries.forEach(function(en) {
+        en.target.classList.toggle('is-active', en.isIntersecting);
+      });
+    }, { rootMargin: '-88px 0px -55% 0px' });
+    sections.forEach(function(s) { so.observe(s); });
+  }
+})();
+</script>

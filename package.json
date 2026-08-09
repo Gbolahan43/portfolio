@@ -5,8 +5,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "astro check",
     "lint": "astro check",
-    "test:build": "astro build"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",
@@ -15,6 +16,7 @@
     "tailwindcss": "^3.4.19"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.3.4",
     "autoprefixer": "^10.5.4",
     "typescript": "^5.7.0"
   },
