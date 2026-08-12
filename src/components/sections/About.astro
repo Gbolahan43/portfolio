@@ -23,9 +23,19 @@ const { portrait, paragraphs, section } = Astro.props;
   </div>
   <div class="section__body">
     <div class="split reveal">
-      <div class="portrait" data-od-id="about-portrait">
-        <span class="caption">Portrait</span>
-        <span class="caption" style="letter-spacing:.04em;text-transform:none">1:1 · high-contrast · cool-neutral grade</span>
+      <div class="portrait" data-shot data-od-id="about-portrait">
+        <img
+          src={portrait.src}
+          alt={portrait.alt}
+          width="640"
+          height="640"
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="portrait__ph">
+          <span class="caption">Portrait</span>
+          <span class="caption" style="letter-spacing:.04em;text-transform:none">1:1 · high-contrast · cool-neutral grade</span>
+        </span>
       </div>
       <div class="about">
         {paragraphs.map((p) => <p>{p}</p>)}

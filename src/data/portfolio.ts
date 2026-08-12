@@ -11,6 +11,12 @@ export type Tag =
   | 'serverless'
   | 'vision'
   | 'anomaly-detection'
+  | 'hybrid'
+  | 'computer-vision'
+  | 'classification'
+  | 'ensemble'
+  | 'analytics'
+  | 'nlp'
   | 'prompt-engineering';
 
 export type Format = 'essay' | 'talk';
@@ -60,6 +66,12 @@ export interface FeaturedProject {
     constraint: string;
     decisions: { n: string; text: string }[];
     tradeoffs: string;
+    /**
+     * Measured figure — omitted where none exists. Never a bare number:
+     * each carries the caveat that qualifies it (synthetic data, validation
+     * split, training accuracy) in the same sentence.
+     */
+    result?: string;
     stack: string[];
   };
 }
@@ -169,39 +181,39 @@ export const featuredProjects: FeaturedProject[] = [
     title: 'AgriSabi',
     domain: 'Agricultural diagnostics for smallholder farmers',
     system:
-      'A Retrieval-Augmented Generation pipeline on AWS Bedrock Knowledge Bases, pairing Claude vision models with a corpus of agronomic literature.',
+      'A two-stage Retrieval-Augmented Generation pipeline on AWS Bedrock Knowledge Bases. A vision pass extracts symptoms from a leaf photo, then a retrieval step grounds the diagnosis in agronomic literature rather than the model\'s own knowledge.',
     outcome: {
       state: 'B',
       text: 'Returns localized, source-grounded diagnostic guidance from a corpus of agronomic documents.',
     },
     tags: ['retrieval', 'vision', 'serverless'],
     links: {
-      repo: { label: 'Repo', href: null },
-      demo: { label: 'Demo', href: null },
+      repo: { label: 'Repo', href: 'https://github.com/Gbolahan43/AgriSabi' },
+      demo: { label: 'Demo', href: 'https://master.d27jhgb9wlhqid.amplifyapp.com/' },
     },
     screenshot: {
-      src: '/images/agrisabi.png',
-      alt: 'AgriSabi interface — a diagnostic response with cited agronomic sources',
+      src: '/images/agrisabi.webp',
+      alt: 'AgriSabi landing page — "Bridging the Gap Between Research and the African Farmer", with Home, Market and Assistant navigation',
       width: 1600,
       height: 900,
     },
     detail: {
       problem: 'Farmers lack immediate access to localized, science-backed diagnostic advice.',
       constraint:
-        'Sub-2-second response while retrieving across thousands of agronomic documents. ⚠️ Confirm the latency target was real.',
+        'A single model call asked to both read the photo and recall treatment knowledge risks inventing a diagnosis. Diagnosis needed to be split so the model never answers past what it actually retrieved.',
       decisions: [
         {
           n: '01',
-          text: 'Bedrock Knowledge Bases over a self-managed vector store — managed retrieval kept the serverless footprint intact and removed index operations from scope.',
+          text: 'Two-stage vision-then-retrieval flow instead of one combined call — the vision pass extracts only physical symptoms, a separate retrieval step grounds the treatment answer in indexed agronomic sources.',
         },
         {
           n: '02',
-          text: 'Claude vision for image intake rather than a bespoke classifier — accepted higher per-call cost to avoid training and maintaining a model on limited labelled data.',
+          text: 'Bedrock Knowledge Bases (OpenSearch Serverless) over a self-managed vector store — managed retrieval kept the serverless footprint intact and removed index operations from scope.',
         },
       ],
       tradeoffs:
-        'Chose a larger, slower vision model for image processing to guarantee accuracy at the expense of higher API cost per query.',
-      stack: ['Bedrock', 'Claude', 'Python', 'Lambda'],
+        'Chose a larger vision model to extract symptoms reliably, accepting higher per-call API cost over training and maintaining a bespoke image classifier on limited labelled data.',
+      stack: ['Bedrock', 'Claude', 'FastAPI', 'App Runner'],
     },
   },
   {
@@ -209,39 +221,39 @@ export const featuredProjects: FeaturedProject[] = [
     title: 'ChainQuery AI',
     domain: 'Natural-language analytics over Solana on-chain data',
     system:
-      'A translation layer converting natural-language prompts into optimized DuneSQL, constrained to execute inside Dune\'s query timeout.',
+      'Converts natural-language questions into optimized DuneSQL (Trino) queries for Solana on-chain data, via a stateful LangGraph workflow that injects live schema and dialect rules into context. Guest access needs no signup; upgrades to a full account for persistent history.',
     outcome: {
       state: 'B',
       text: 'Non-technical stakeholders query Solana on-chain data without writing SQL.',
     },
     tags: ['agents', 'retrieval'],
     links: {
-      repo: { label: 'Repo', href: null },
-      demo: { label: 'Demo', href: null },
+      repo: { label: 'Repo', href: 'https://github.com/Gbolahan43/chainquery-ai' },
+      demo: { label: 'Demo', href: 'https://chainquery-app.onrender.com' },
     },
     screenshot: {
-      src: '/images/chainquery.png',
-      alt: 'ChainQuery AI interface — a natural-language prompt and the DuneSQL it generated',
+      src: '/images/chainquery.webp',
+      alt: 'ChainQuery AI landing page — "Turn English into Blockchain Data", above a terminal showing the prompt "Show me top 10 SOL holders" and the SQL it generated',
       width: 1600,
       height: 900,
     },
     detail: {
       problem: 'Blockchain analytics demands complex SQL, locking out non-technical stakeholders.',
       constraint:
-        'Generated SQL had to execute within Dune\'s hard timeout — correctness alone was insufficient; queries had to be cheap.',
+        'Solana\'s on-chain tables are deeply nested and DuneSQL/Trino has its own dialect quirks — a syntactically valid query can still be a wrong one, so correctness had to hold up against an unfamiliar schema and dialect, not just general SQL knowledge.',
       decisions: [
         {
           n: '01',
-          text: 'Restricted the accepted vocabulary to financial and transaction terms, trading general conversation for query reliability.',
+          text: 'A stateful LangGraph workflow over a single prompt-and-parse call — breaks generation into discrete Input → Prompt → LLM → SQL steps, injecting the actual database schema and DuneSQL syntax rules at each stage instead of relying on the model\'s memorized idea of Solana\'s schema.',
         },
         {
           n: '02',
-          text: 'Optimized for first-attempt execution rather than retry loops — a failed query costs the user their whole session.',
+          text: 'Hybrid guest and authenticated access — session-based guest access removes signup friction for a first query, with a seamless upgrade path to a JWT-authenticated account for persistent query history.',
         },
       ],
       tradeoffs:
-        'Restricting vocabulary to financial and transaction terms raised accuracy but limited general conversational capability.',
-      stack: ['DuneSQL', 'Solana', 'Python'],
+        'Schema-aware generation is accurate for the Solana tables it knows, but the system is scoped to DuneSQL/Trino specifically — multi-chain support is on the roadmap, not built yet.',
+      stack: ['DuneSQL', 'Solana', 'LangGraph'],
     },
   },
   {
@@ -249,82 +261,88 @@ export const featuredProjects: FeaturedProject[] = [
     title: 'FleetGuard',
     domain: 'Fleet telemetry monitoring for logistics operators',
     system:
-      'Machine-learning anomaly detection over real-time vehicle telemetry, with Amazon Bedrock interpreting flagged events for dispatchers.',
+      'Machine-learning anomaly detection over real-time vehicle telemetry — fuel theft, route deviation, private use, excessive idling — with Amazon Bedrock (Claude) turning each flagged event into a plain-language incident report for dispatchers.',
     outcome: {
       state: 'A',
       value: 'Fifth place · One with AI hackathon',
       method: 'Externally judged placement',
     },
-    tags: ['anomaly-detection', 'serverless'],
+    tags: ['anomaly-detection', 'hybrid'],
     links: {
       repo: { label: 'Repo', href: null },
       demo: { label: 'Demo', href: null },
     },
     screenshot: {
-      src: '/images/fleetguard.png',
-      alt: 'FleetGuard dispatcher view — flagged telemetry anomalies with Bedrock explanations',
+      src: '/images/fleetguard.webp',
+      alt: 'FleetGuard live map — a Lagos fleet dashboard with active-vehicle, alert and fuel-theft counters, a vehicle list, and Bedrock-written incident reports beside a flagged route',
       width: 1600,
       height: 900,
     },
     detail: {
       problem: 'Logistics operators lose revenue to undetected fuel theft and route abuse.',
       constraint:
-        'Concurrent telemetry streams from hundreds of vehicles without dropping packets. ⚠️ Confirm the vehicle count.',
+        'Two very different access patterns had to share one model — a fleet manager watching a live map in real time, and an analyst auditing a full day\'s trip logs after the fact. Same scoring logic, two very different latency and throughput needs.',
       decisions: [
         {
           n: '01',
-          text: 'Prioritized recall over precision — a missed theft costs more than a reviewed false positive.',
+          text: 'Unsupervised IsolationForest over a supervised classifier — no labelled production incident data existed to train on, so detection had to work without ground-truth theft or abuse examples.',
         },
         {
           n: '02',
-          text: 'Bedrock as the interpretation layer rather than raw anomaly scores — dispatchers act on explanations, not floats.',
+          text: 'Two deployment paths sharing one scoring core — Lambda for live telemetry pings, App Runner for batch CSV analysis — with identical feature engineering and parity-tested scoring so live and offline results can\'t silently diverge.',
         },
       ],
       tradeoffs:
-        'Prioritizing recall over precision meant no theft event was missed, at the cost of more manual review for dispatchers.',
-      stack: ['Bedrock', 'Python', 'AWS'],
+        'Prioritized recall over precision (0.998 vs. 0.990) since a missed theft costs more than a reviewed false positive, raising the manual-review load on dispatchers for borderline cases.',
+      result:
+        'F1 0.994 on mock Lagos fleet telemetry (10 vehicles, ~4,800 pings, ~12% injected anomalies) — not yet validated against real production data.',
+      stack: ['Bedrock', 'Lambda', 'App Runner'],
     },
   },
   {
-    // ⚠️ PLACEHOLDER COPY — awaiting content pass. Structure is final; strings are not.
     index: '01.4',
-    title: 'Crop disease prediction',
-    domain: 'Leaf-image disease classification for field scouting',
+    title: 'PlantGuard',
+    domain: 'Leaf disease diagnosis from a photo',
     system:
-      'A convolutional network with a spatial attention module classifying leaf images, served through a Streamlit front end. ⚠️ Placeholder — replace with the real system summary.',
+      'A CNN image classifier that identifies 38 leaf-disease classes across 14 crop species from a single photo, served through a Streamlit app with a confidence floor to catch out-of-domain images.',
     outcome: {
       state: 'B',
-      text: 'Classifies leaf images into disease classes from a single photo. ⚠️ Placeholder outcome — replace or promote to state A with a verified figure.',
+      text: 'Classifies 38 leaf-disease classes across 14 crop species from a single photo.',
     },
-    tags: ['vision'],
+    tags: ['computer-vision', 'classification'],
     links: {
-      repo: { label: 'Repo', href: null },
+      repo: { label: 'Repo', href: 'https://github.com/Gbolahan43/crop-disease-app' },
       demo: { label: 'Demo', href: 'https://crop-disease.streamlit.app/' },
     },
     screenshot: {
-      src: '/images/crop-disease.png',
-      alt: 'Crop disease prediction app — a classified leaf image with its predicted class',
+      src: '/images/crop-disease.webp',
+      alt: 'PlantGuard app — "Know what is wrong with your leaf" above a leaf photo, with a sidebar showing the active model: 38 classes, 14 crops, 0.977 validation accuracy',
       width: 1600,
       height: 900,
     },
     detail: {
       problem:
-        'Field scouts diagnose crop disease by eye, and misreads compound across a season. ⚠️ Placeholder.',
+        'Diagnosing crop disease from a photo, without waiting on an agronomist, using nothing more than a phone camera.',
       constraint:
-        'Had to run inference within a free-tier Streamlit container with no GPU. ⚠️ Confirm the deployment constraint.',
+        'The classifier is closed-world — softmax over 38 classes always returns one of them confidently, even for a photo of something it\'s never seen. A confidence floor catches likely off-domain cases but can\'t eliminate a confident wrong answer.',
       decisions: [
         {
+          // The deployed app's sidebar reads "newplantdis.keras · 0.977 validation
+          // accuracy", which matches this checkpoint — README flag 7 resolved in
+          // favour of the stronger model.
           n: '01',
-          text: 'Spatial attention over a plain CNN backbone — lesion cues are local, and attention kept the useful region weighted without a larger model. ⚠️ Placeholder.',
+          text: 'Selected the 5-epoch checkpoint over the 10-epoch one — the longer run\'s validation accuracy regressed sharply on its final epoch (98.2% to 88.6%) while validation loss nearly quintupled, and the weights were saved after the regression rather than at the best epoch.',
         },
         {
           n: '02',
-          text: 'Placeholder decision — replace with the second real architectural choice and the reason behind it.',
+          text: 'One shared class registry across three Streamlit front-ends — keeps the 38 labels and model path in one place so label order can\'t drift between UI iterations.',
         },
       ],
       tradeoffs:
-        'Placeholder trade-off — state what was given up and what it bought.',
-      stack: ['PyTorch', 'Streamlit', 'Python'],
+        'The headline accuracy is measured on the validation split, which was also used to monitor training — there\'s no untouched held-out test set, so treat it as an optimistic estimate rather than a true generalization number.',
+      result:
+        '97.7% validation accuracy across 38 classes (macro F1 0.98) on PlantVillage\'s lab-condition photos. Field photography will likely score lower.',
+      stack: ['Keras', 'TensorFlow', 'Streamlit'],
     },
   },
 ];
@@ -334,24 +352,26 @@ export const alsoBuilt: CompactProject[] = [
   {
     title: 'Fraud detection system',
     description:
-      'Random-forest classifier served as a serverless microservice for pre-settlement transaction screening.',
+      'Flags suspicious users on a crypto trading platform from deposit, withdrawal and trade behavior, using a three-model consensus (Logistic Regression, Random Forest, XGBoost) that assigns a Low/Medium/High/Extreme risk level. Only 0.42% of users are actually suspicious, so the app scores itself on recall and precision over a held-out split rather than quoting an accuracy figure.',
     thumbnail: {
-      src: '/images/fraudsystem.png',
-      alt: 'Fraud detection app — a transaction screened with its risk score',
+      src: '/images/fraud-detection.webp',
+      alt: 'Fraud detection dashboard — total users, suspicious users and fraud-rate tiles over a crypto trading dataset, with all three models loaded',
     },
     links: [
       { label: 'Live demo', href: 'https://fraudml-app.streamlit.app/' },
+      { label: 'Repo', href: 'https://github.com/Gbolahan43/fraud-detection-system' },
     ],
   },
   {
     title: 'Sentiment analysis API',
-    description: 'FastAPI service wrapping a quantized transformer for low-overhead sentiment scoring.',
+    description:
+      'A FastAPI service classifying text as positive, negative or neutral, backed by a TF-IDF and Logistic Regression baseline with a 1,024-entry LRU cache in front of inference and a DistilBERT option kept in reserve.',
     thumbnail: {
-      src: '/images/sentiment.png',
-      alt: 'Sentiment analysis API — a request and its scored response',
+      src: '/images/sentiment-api.webp',
+      alt: 'Sentiment Analysis API README — a REST API classifying text sentiment, with CI passing, Python, FastAPI and MIT license badges',
     },
     links: [
-      { label: 'Repo', href: null },
+      { label: 'Repo', href: 'https://github.com/Gbolahan43/Sentiment-Analysis-API' },
     ],
   },
 ];
@@ -422,7 +442,7 @@ export const community = {
 // ── About (§05) ──────────────────────────────────────────────
 export const about = {
   portrait: {
-    src: '/images/portrait.jpg',
+    src: '/images/portrait.png',
     alt: 'Abdulbasit Olanrewaju',
   },
   paragraphs: [

@@ -102,6 +102,14 @@ const detailId = `d-${project.index.replace('.', '-')}`;
       <dt>Trade-offs</dt>
       <dd>{project.detail.tradeoffs}</dd>
 
+      {/* Result — only where a measured figure exists; caveat travels with it */}
+      {project.detail.result && (
+        <>
+          <dt>Result</dt>
+          <dd>{project.detail.result}</dd>
+        </>
+      )}
+
       <dt>Stack</dt>
       <dd class="stack-list">{project.detail.stack.join(' · ')}</dd>
     </dl>

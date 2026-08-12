@@ -22,7 +22,7 @@ export const siteConfig = {
 
   // ── Assets ────────────────────────────────────────────────
   resumePdf: 'abdulbasit-olanrewaju-resume.pdf',
-  portrait: '/images/portrait.jpg',
+  portrait: '/images/portrait.png',
 
   // ── Theme ─────────────────────────────────────────────────
   defaultTheme: 'light' as const,
