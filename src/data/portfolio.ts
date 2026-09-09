@@ -197,7 +197,7 @@ export const featuredProjects: FeaturedProject[] = [
       demo: { label: 'Demo', href: 'https://master.d27jhgb9wlhqid.amplifyapp.com/' },
     },
     screenshot: {
-      src: '/images/agrisabi.webp',
+      src: '/portfolio/images/agrisabi.webp',
       alt: 'AgriSabi landing page — "Bridging the Gap Between Research and the African Farmer", with Home, Market and Assistant navigation',
       width: 1600,
       height: 900,
@@ -237,7 +237,7 @@ export const featuredProjects: FeaturedProject[] = [
       demo: { label: 'Demo', href: 'https://chainquery-app.onrender.com' },
     },
     screenshot: {
-      src: '/images/chainquery.webp',
+      src: '/portfolio/images/chainquery.webp',
       alt: 'ChainQuery AI landing page — "Turn English into Blockchain Data", above a terminal showing the prompt "Show me top 10 SOL holders" and the SQL it generated',
       width: 1600,
       height: 900,
@@ -281,7 +281,7 @@ export const featuredProjects: FeaturedProject[] = [
       },
     },
     screenshot: {
-      src: '/images/fleetguard.webp',
+      src: '/portfolio/images/fleetguard.webp',
       alt: 'FleetGuard live map — a Lagos fleet dashboard with active-vehicle, alert and fuel-theft counters, a vehicle list, and Bedrock-written incident reports beside a flagged route',
       width: 1600,
       height: 900,
@@ -323,7 +323,7 @@ export const featuredProjects: FeaturedProject[] = [
       demo: { label: 'Demo', href: 'https://crop-disease.streamlit.app/' },
     },
     screenshot: {
-      src: '/images/crop-disease.webp',
+      src: '/portfolio/images/crop-disease.webp',
       alt: 'PlantGuard app — "Know what is wrong with your leaf" above a leaf photo, with a sidebar showing the active model: 38 classes, 14 crops, 0.977 validation accuracy',
       width: 1600,
       height: 900,
@@ -362,7 +362,7 @@ export const alsoBuilt: CompactProject[] = [
     description:
       'Flags suspicious users on a crypto trading platform from deposit, withdrawal and trade behavior, using a three-model consensus (Logistic Regression, Random Forest, XGBoost) that assigns a Low/Medium/High/Extreme risk level. Only 0.42% of users are actually suspicious, so the app scores itself on recall and precision over a held-out split rather than quoting an accuracy figure.',
     thumbnail: {
-      src: '/images/fraud-detection.webp',
+      src: '/portfolio/images/fraud-detection.webp',
       alt: 'Fraud detection dashboard — total users, suspicious users and fraud-rate tiles over a crypto trading dataset, with all three models loaded',
     },
     links: [
@@ -375,7 +375,7 @@ export const alsoBuilt: CompactProject[] = [
     description:
       'A FastAPI service classifying text as positive, negative or neutral, backed by a TF-IDF and Logistic Regression baseline with a 1,024-entry LRU cache in front of inference and a DistilBERT option kept in reserve.',
     thumbnail: {
-      src: '/images/sentiment-api.webp',
+      src: '/portfolio/images/sentiment-api.webp',
       alt: 'Sentiment Analysis API README — a REST API classifying text sentiment, with CI passing, Python, FastAPI and MIT license badges',
     },
     links: [
@@ -453,7 +453,7 @@ export const community = {
 // ── About (§05) ──────────────────────────────────────────────
 export const about = {
   portrait: {
-    src: '/images/portrait.png',
+    src: '/portfolio/images/portrait.png',
     alt: 'Abdulbasit Olanrewaju',
   },
   paragraphs: [
