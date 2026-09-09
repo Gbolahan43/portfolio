@@ -87,7 +87,7 @@
   font-size: 14px; font-weight: 450; color: var(--muted);
   padding: 12px 2px; transition: color var(--dur-fast) ease;
 }
-.nav__links a:hover { color: var(--fg); }
+.nav__links a:hover, .nav__links a.is-active { color: var(--fg); }
 .nav__actions { display: flex; align-items: center; gap: var(--space-3); }
 
 .toggle {
@@ -181,9 +181,13 @@ main { padding-top: var(--space-4); }
   --card-pad: var(--space-8);
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: var(--card-pad);
-  transition: border-color var(--dur-fast) ease;
+  transition: border-color var(--dur-fast) ease, transform var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
 }
-.card:hover { border-color: color-mix(in oklch, var(--border) 55%, var(--fg)); }
+.card:hover { 
+  border-color: color-mix(in oklch, var(--border) 55%, var(--fg)); 
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -8px color-mix(in oklch, var(--fg) 8%, transparent);
+}
 .card__idx { color: var(--muted); display: block; margin-bottom: var(--space-5); }
 
 /* ── Project preview: full-bleed 16:9 band ── */
