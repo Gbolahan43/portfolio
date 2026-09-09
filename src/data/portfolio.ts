@@ -135,7 +135,7 @@ export interface SectionData {
 // ═══ DATA ═══════════════════════════════════════════════════════════
 
 export const hero: HeroData = {
-  eyebrow: 'AI / ML Engineer',
+  eyebrow: 'Abdulbasit Olanrewaju · AI / ML Engineer',
   headline: [
     'I build agentic AI and RAG systems',
     'that turn messy domain data into',
@@ -457,7 +457,7 @@ export const about = {
     alt: 'Abdulbasit Olanrewaju',
   },
   paragraphs: [
-    "I'm an AI/ML engineer in Lagos. Most of my work starts in the same place: a domain expert has knowledge that a system can't reach, buried in documents, images, or telemetry that don't fit cleanly into a database.",
+    "I'm Abdulbasit — an AI/ML engineer based in Lagos. Most of my work starts in the same place: a domain expert has knowledge that a system can't reach, buried in documents, images, or telemetry that don't fit cleanly into a database.",
     'I build the retrieval and agent layers that close that gap. Usually on AWS, usually serverless, always with an eye on what each query actually costs. I care about the boring parts: whether the pipeline holds under real data, what it spends, and what it does when it\'s wrong.',
     "I'm an AWS Community Builder, now in my fourth year, and I write about what I learn shipping this work.",
   ],

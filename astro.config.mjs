@@ -8,8 +8,8 @@ const projectRoot = resolve(process.cwd());
 const basePath = process.env.BASE_PATH || '';
 
 export default defineConfig({
-  site: 'https://abdulbasitolanrewaju.com',
-  base: basePath,
+  site: 'https://gbolahan43.github.io',
+  base: '/portfolio',
   build: {
     format: 'directory',
   },
