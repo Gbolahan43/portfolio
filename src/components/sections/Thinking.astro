@@ -7,6 +7,7 @@
  */
 import type { ThinkingEntry } from '~/data/portfolio';
 import type { SectionData } from '~/data/portfolio';
+import { tagFilters } from '~/data/portfolio';
 import Icon from '../ui/Icon.astro';
 
 interface Props {
@@ -25,11 +26,15 @@ const { entries, section } = Astro.props;
   <div class="section__body">
     <div class="reveal" data-od-id="section-thinking-body">
       <div class="filter" role="tablist" aria-label="Filter by topic" aria-orientation="horizontal" data-od-id="thinking-filter">
-        <button role="tab" type="button" aria-selected="true" data-tag="all">All</button>
-        <button role="tab" type="button" aria-selected="false" data-tag="agents" tabindex={-1}>agents</button>
-        <button role="tab" type="button" aria-selected="false" data-tag="serverless" tabindex={-1}>serverless</button>
-        <button role="tab" type="button" aria-selected="false" data-tag="retrieval" tabindex={-1}>retrieval</button>
-        <button role="tab" type="button" aria-selected="false" data-tag="prompt-engineering" tabindex={-1}>prompt-engineering</button>
+        {tagFilters.map((f, i) => (
+          <button
+            role="tab"
+            type="button"
+            aria-selected={i === 0 ? 'true' : 'false'}
+            data-tag={f.tag}
+            tabindex={i === 0 ? 0 : -1}
+          >{f.label}</button>
+        ))}
       </div>
 
       <ul class="think" data-od-id="thinking-list">

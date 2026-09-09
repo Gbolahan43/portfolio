@@ -101,6 +101,11 @@ export interface ThinkingEntry {
   link: string | null;
 }
 
+// ── Credentials (§05) — scannable strip, not a résumé dump ─────────
+export interface CredentialsData {
+  groups: { label: string; items: string[] }[];
+}
+
 // ── Section data ────────────────────────────────────────────────────
 export interface HeroData {
   eyebrow: string;
@@ -152,7 +157,7 @@ export const hero: HeroData = {
   getInTouchHref: '#contact',
   evidence: [
     'AWS Community Builder · Year 4',
-    'Bedrock · RAG · Agents · Serverless',
+    'Python · AWS · RAG · Agents · Serverless',
     'Lagos, Nigeria — Remote / Hybrid / On-site',
   ],
 };
@@ -213,7 +218,7 @@ export const featuredProjects: FeaturedProject[] = [
       ],
       tradeoffs:
         'Chose a larger vision model to extract symptoms reliably, accepting higher per-call API cost over training and maintaining a bespoke image classifier on limited labelled data.',
-      stack: ['Bedrock', 'Claude', 'FastAPI', 'App Runner'],
+      stack: ['Bedrock', 'LLM', 'FastAPI', 'App Runner'],
     },
   },
   {
@@ -269,8 +274,11 @@ export const featuredProjects: FeaturedProject[] = [
     },
     tags: ['anomaly-detection', 'hybrid'],
     links: {
-      repo: { label: 'Repo', href: null },
-      demo: { label: 'Demo', href: null },
+      repo: { label: 'Repo', href: 'https://github.com/Gbolahan43/FleetGuard' },
+      demo: {
+        label: 'Demo',
+        href: 'https://migrate-to-react-vite.d133ayivgg71g2.amplifyapp.com/',
+      },
     },
     screenshot: {
       src: '/images/fleetguard.webp',
@@ -371,6 +379,7 @@ export const alsoBuilt: CompactProject[] = [
       alt: 'Sentiment Analysis API README — a REST API classifying text sentiment, with CI passing, Python, FastAPI and MIT license badges',
     },
     links: [
+      { label: 'Live demo', href: 'https://github.com/Gbolahan43/Sentiment-Analysis-API' },
       { label: 'Repo', href: 'https://github.com/Gbolahan43/Sentiment-Analysis-API' },
     ],
   },
@@ -382,13 +391,14 @@ export const openSource: OpenSourceEntry[] = [
     title: 'Hackmamba Vault docs',
     role: 'Contributor',
     summary:
-      'Merged 15 pull requests improving API endpoint examples in the core documentation repository.',
+      'Contributed to the Vault documentation and was recognized as a top contributor to the project.',
     link: { label: 'View repository', href: 'https://github.com/Gbolahan43/docs' },
   },
   {
     title: 'DXMentorship',
-    role: 'Maintainer',
-    summary: 'Maintain the core repository for a developer mentorship programme.',
+    role: 'Contributor',
+    summary:
+      'A developer advocacy and developer-experience mentorship programme I came through, and am listed on as a contributor.',
     link: { label: 'View repository', href: 'https://github.com/Gbolahan43/dxmentorship' },
   },
 ];
@@ -397,46 +407,47 @@ export const openSource: OpenSourceEntry[] = [
 export const thinking: ThinkingEntry[] = [
   {
     format: 'essay',
-    title: 'Scaling AI with Amazon Bedrock AgentCore',
-    venue: 'Dev.to',
-    tags: ['agents', 'serverless'],
-    link: null,
-  },
-  {
-    format: 'essay',
     title: 'The Art of Instruction: A Comprehensive Guide to Prompt Engineering',
     venue: 'Dev.to',
     tags: ['prompt-engineering'],
-    link: null,
+    link: 'https://dev.to/excellus/the-art-of-instruction-a-comprehensive-guide-to-prompt-engineering-3jg3',
   },
   {
     format: 'essay',
-    title: 'Building Serverless RAG Pipelines with FastAPI',
-    venue: 'LinkedIn',
-    tags: ['retrieval', 'serverless'],
-    link: null,
+    title: 'Scaling AI with Amazon Bedrock AgentCore: Architecture, Governance, and Integration',
+    venue: 'Dev.to',
+    tags: ['agents', 'serverless'],
+    link: 'https://dev.to/excellus/scaling-ai-with-amazon-bedrock-agentcore-architecture-governance-and-integration-5012',
+  },
+  {
+    format: 'essay',
+    title: 'The Rise of Multi-Agent Systems: What They Are and Why They Matter',
+    venue: 'Dev.to',
+    tags: ['agents'],
+    link: 'https://dev.to/excellus/the-rise-of-multi-agent-systems-what-they-are-and-why-they-matter-e6i',
   },
   {
     format: 'talk',
-    title: 'Deploying AI Solutions for Battery as a Service',
-    venue: 'PowerElec Webinar · February 2026',
+    title: 'Hands-on with Amazon AgentCore: Building Intelligent Applications Faster',
+    venue: 'YouTube',
     tags: ['agents'],
-    link: null,
+    link: 'https://www.youtube.com/watch?v=xrEHgDKPZ4k',
   },
 ];
 
+// Filter tabs for §03 — every tag here must match at least one `thinking` entry,
+// or the tab filters the list down to nothing.
 export const tagFilters: { label: string; tag: Tag | 'all' }[] = [
   { label: 'All', tag: 'all' },
   { label: 'agents', tag: 'agents' },
   { label: 'serverless', tag: 'serverless' },
-  { label: 'retrieval', tag: 'retrieval' },
   { label: 'prompt-engineering', tag: 'prompt-engineering' },
 ];
 
 // ── Community (§04) ──────────────────────────────────────────
 export const community = {
   credential: 'AWS Community Builder · Year 4',
-  body: 'I review cloud architectures for new members and publish technical guides on serverless ML deployment.',
+  body: 'I mentor students on cloud technologies and speak publicly on AI and AWS, including a recent talk on Amazon AgentCore. Now in my fourth year in the program.',
 };
 
 // ── About (§05) ──────────────────────────────────────────────
@@ -447,8 +458,23 @@ export const about = {
   },
   paragraphs: [
     "I'm an AI/ML engineer in Lagos. Most of my work starts in the same place: a domain expert has knowledge that a system can't reach, buried in documents, images, or telemetry that don't fit cleanly into a database.",
-    'I build the retrieval and agent layers that close that gap — usually on AWS, usually serverless, always with an eye on what each query actually costs. I care about the boring parts: whether the pipeline holds under real data, what it spends, and what it does when it\'s wrong.',
+    'I build the retrieval and agent layers that close that gap. Usually on AWS, usually serverless, always with an eye on what each query actually costs. I care about the boring parts: whether the pipeline holds under real data, what it spends, and what it does when it\'s wrong.',
     "I'm an AWS Community Builder, now in my fourth year, and I write about what I learn shipping this work.",
+  ],
+};
+
+// ── Credentials — one line per group, terse, no logos ────────
+export const credentials: CredentialsData = {
+  groups: [
+    {
+      label: 'Certifications',
+      items: [
+        'AWS Certified Cloud Practitioner (2025–2028)',
+        'Kubernetes and Cloud Native Associate (KCNA)',
+        'Blockchain Data Analytics (SQL)',
+        'AWS Certified AI Practitioner (in progress)',
+      ],
+    },
   ],
 };
 
@@ -456,7 +482,7 @@ export const about = {
 export const contact: ContactData = {
   heading: "Let's talk.",
   subline: 'Open to senior AI/ML roles — remote, hybrid, or on-site from Lagos.',
-  email: null,
+  email: 'gbolahanbasit43@gmail.com',
   secondaryLinks: [
     { label: 'GitHub', href: 'https://github.com/Gbolahan43' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/abdulbasit-olanrewaju-gbolahan' },

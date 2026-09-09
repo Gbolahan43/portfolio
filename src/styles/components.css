@@ -383,6 +383,16 @@ main { padding-top: var(--space-4); }
 .about p + p { margin-top: var(--space-5); }
 .about p { max-width: 62ch; color: var(--fg-subtle); }
 
+/* Credentials strip — label rail + one dot-separated line per group */
+.creds { margin-top: var(--space-10); border-top: 1px solid var(--border); }
+.creds__row {
+  display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); gap: var(--space-6);
+  align-items: baseline; padding: var(--space-5) 0;
+}
+.creds__row + .creds__row { border-top: 1px solid var(--border); }
+.creds__label { color: var(--muted); }
+.creds__items { color: var(--fg-subtle); max-width: 62ch; }
+
 .contact {
   padding-top: var(--space-32); padding-bottom: var(--space-20); text-align: center;
 }
@@ -469,6 +479,7 @@ footer { margin-top: var(--space-16); border-top: 1px solid var(--border); }
   .think__item { grid-template-columns: 1fr; gap: var(--space-2); }
   .split { grid-template-columns: 1fr; gap: var(--space-6); }
   .portrait { max-width: 280px; margin-inline: auto; }
+  .creds__row { grid-template-columns: 1fr; gap: var(--space-2); }
   .contact { padding-top: var(--space-20); text-align: left; }
   .contact__sub { margin-inline: 0; }
   .copy { min-height: 52px; padding: 0 var(--space-4); max-width: none; }

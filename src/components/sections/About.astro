@@ -1,19 +1,22 @@
 ---
 /**
- * §05 About — portrait (left) + prose (right).
+ * §05 About — portrait (left) + prose (right), then a credentials strip.
  * Portrait is here only, never in the hero (R-24).
  * Square crop, --radius-md, 1:1, 320px desktop / capped 280px mobile.
+ * Credentials are a scannable strip (label + dot-separated line), not a badge
+ * wall — same restraint as skipping GitHub stats widgets.
  * Per wireframes §7.8 and content-inventory §5.
  */
-import type { SectionData } from '~/data/portfolio';
+import type { SectionData, CredentialsData } from '~/data/portfolio';
 
 interface Props {
   portrait: { src: string; alt: string };
   paragraphs: string[];
+  credentials: CredentialsData;
   section: SectionData;
 }
 
-const { portrait, paragraphs, section } = Astro.props;
+const { portrait, paragraphs, credentials, section } = Astro.props;
 ---
 
 <section class="section container" id={section.id} aria-labelledby={`${section.id}-h`} data-od-id={`section-${section.id}`}>
@@ -41,5 +44,14 @@ const { portrait, paragraphs, section } = Astro.props;
         {paragraphs.map((p) => <p>{p}</p>)}
       </div>
     </div>
+
+    <dl class="creds reveal" data-od-id="about-credentials">
+      {credentials.groups.map((g) => (
+        <div class="creds__row">
+          <dt class="label creds__label">{g.label}</dt>
+          <dd class="creds__items">{g.items.join(' · ')}</dd>
+        </div>
+      ))}
+    </dl>
   </div>
 </section>
